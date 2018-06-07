@@ -1,6 +1,7 @@
 package pages
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -17,6 +18,10 @@ func CreateRouter() *mux.Router {
 
 	r.HandleFunc("/login", loginPage).Methods("GET")
 	r.HandleFunc("/login", login).Methods("POST")
+
+	r.HandleFunc("/_ah/health", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, "ok")
+	})
 
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("public")))
 	return r

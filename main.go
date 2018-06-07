@@ -10,5 +10,5 @@ import (
 
 func main() {
 	flag.Parse()
-	log.Fatal(http.ListenAndServe("localhost:5000", pages.CreateRouter()))
+	log.Fatal(http.ListenAndServe(":8080", pages.CreateRouter()))
 }
