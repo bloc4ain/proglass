@@ -1,7 +1,6 @@
 package pages
 
 import (
-	"html/template"
 	"net/http"
 )
 
@@ -24,15 +23,7 @@ type HomePage struct {
 	Promotions []Promotion
 }
 
-func homeHandler(w http.ResponseWriter, r *http.Request) {
-	t, err := template.ParseFiles("public/pages/home.html")
-
-	if err != nil {
-		w.WriteHeader(400)
-		w.Write([]byte(err.Error()))
-		return
-	}
-
+func homePage(w http.ResponseWriter, r *http.Request) {
 	p := HomePage{
 		News: []NewsTopic{
 			{Title: "New website", Content: "ProGlass Service launched its new website with catalogue"},
@@ -48,5 +39,9 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	t.Execute(w, p)
+	render(w, r, homeTemplate, p)
+}
+
+func init() {
+	Router.HandleFunc("/", homePage)
 }

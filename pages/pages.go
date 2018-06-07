@@ -2,27 +2,30 @@ package pages
 
 import (
 	"fmt"
+	"html/template"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
 )
 
-// CreateRouter func
-func CreateRouter() *mux.Router {
-	r := mux.NewRouter()
+// Router router
+var Router = mux.NewRouter()
 
-	r.HandleFunc("/", homeHandler)
-	r.HandleFunc("/catalogue", catalogueHandler)
-	r.HandleFunc("/register", registerHandler)
-	r.HandleFunc("/signin", signinHandler).Methods("POST")
-
-	r.HandleFunc("/login", loginPage).Methods("GET")
-	r.HandleFunc("/login", login).Methods("POST")
-
-	r.HandleFunc("/_ah/health", func(w http.ResponseWriter, r *http.Request) {
+func init() {
+	Router.PathPrefix("/").Handler(http.FileServer(http.Dir("public")))
+	Router.HandleFunc("/_ah/health", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "ok")
 	})
+}
 
-	r.PathPrefix("/").Handler(http.FileServer(http.Dir("public")))
-	return r
+type page struct {
+	Authenticated bool
+	Data          interface{}
+}
+
+func render(w http.ResponseWriter, r *http.Request, t *template.Template, d interface{}) {
+	p := page{isAuthenticated(r), d}
+	log.Println(p)
+	t.Execute(w, &p)
 }

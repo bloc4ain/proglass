@@ -1,18 +1,13 @@
 package pages
 
 import (
-	"html/template"
 	"net/http"
 )
 
-func catalogueHandler(w http.ResponseWriter, r *http.Request) {
-	t, err := template.ParseFiles("public/pages/catalogue.html")
+func cataloguePage(w http.ResponseWriter, r *http.Request) {
+	render(w, r, catalogueTemplate, nil)
+}
 
-	if err != nil {
-		w.WriteHeader(400)
-		w.Write([]byte(err.Error()))
-		return
-	}
-
-	t.Execute(w, struct{}{})
+func init() {
+	Router.HandleFunc("/catalogue", cataloguePage)
 }
