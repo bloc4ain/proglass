@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+        crossorigin="anonymous">
+
+    <title>Products</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="#">Admin</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/admin/products">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/suppliers">Suppliers</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/categories">Categories</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/news">News</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/opinions">Opinions</a>
+                </li>
+            </ul>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addProductModal" id="addproductBtn">Add Product</button>
+            <form class="form-inline my-2 my-lg-0" method="GET" action="/admin/products">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search" name="search">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+
+    <div id="progress" class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0"
+            aria-valuemax="100" style="width: 100%"></div>
+    </div>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Code</th>
+                <th scope="col">Category</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Price</th>
+                <th scope="col">Edit</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <ul class="pagination justify-content-center">
+        <li class="page-item disabled">
+            <a class="page-link" href="#" data-page="prev">&laquo;</a>
+        </li>
+        <li class="page-item active">
+            <a class="page-link" href="#" data-page="1">1</a>
+        </li>
+        <li class="page-item disabled">
+            <a class="page-link" href="#" data-page="next">&raquo;</a>
+        </li>
+    </ul>
+
+    <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Product</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="modal-form">
+                        <fieldset>
+                            <legend>Product</legend>
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="productNameInput">Name</label>
+                                        <input required type="text" class="form-control" id="productNameInput" name="name" placeholder="Enter name">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="productPriceInput">Price</label>
+                                        <input required type="text" class="form-control" id="productPriceInput" name="price" placeholder="Enter price">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="productQuantityInput">Quantity</label>
+                                <input type="text" class="form-control" id="productQuantityInput" name="quantity" placeholder="Enter quantity">
+                            </div>
+                            <div class="form-group">
+                                <label for="productDescriptionInput">Description</label>
+                                <textarea required class="form-control" id="productDescriptionInput" name="description" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="productAdditionalInfoInput">Additional Info</label>
+                                <textarea class="form-control" id="productAdditionalInfoInput" aria-describedby="addInfoHelp" rows="3" name="additionalInfo"></textarea>
+                                <small id="addInfoHelp" class="form-text text-muted">The additional info is for administrators only. Clients will not see anything.</small>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="productBarCodeInput">Code</label>
+                                        <input required type="text" class="form-control" id="productBarCodeInput" name="code" placeholder="Enter code">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="productSupplierCodeInput">Supplier code</label>
+                                        <input type="text" class="form-control" id="productSupplierCodeInput" name="supplierCode" placeholder="Enter supplier code">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="productCatInput">Category</label>
+                                <select class="form-control" id="productCatInput" name="category"></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="productSupplierInput">Supplier</label>
+                                <select class="form-control" id="productSupplierInput" name="supplier"></select>
+                            </div>
+                            <fieldset class="form-group">
+                                <legend>Quantity threshold</legend>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" id="withPreorderInput" name="withPreorder" aria-describedby="withPreorderHelp" type="checkbox" value="" checked="">With Preorder
+                                                <small id="withPreorderHelp" class="form-text text-muted">With preorder will prevent product to appear on low quantity page list</small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="productMinQuantityInput">Min Quantity</label>
+                                            <input type="text" class="form-control" id="productMinQuantityInput" name="threshold" placeholder="Enter min quantity">
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <div class="form-group">
+                                <label for="exampleInputFile">Image</label>
+                                <input type="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
+                                <small id="fileHelp" class="form-text text-muted">Leave empty if image is not changed</small>
+                            </div>
+                            <div class="form-group">
+                                <img id="product-image" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22200%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20200%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_163e4b63b8b%20text%20%7B%20fill%3Argba(255%2C255%2C255%2C.75)%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C%20monospace%3Bfont-size%3A10pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_163e4b63b8b%22%3E%3Crect%20width%3D%22200%22%20height%3D%22200%22%20fill%3D%22%23777%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2274.4296875%22%20y%3D%22104.5%22%3E200x200%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="" class="img-thumbnail">
+                                <div id="img-progress" class="progress">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0"
+                                        aria-valuemax="100" style="width: 100%"></div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Are you sure you want to delete product?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel">Internal error</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+        crossorigin="anonymous"></script>
+    <script src="/public/assets/js/parse.js"></script>
+    <script src="/public/assets/js/init.js"></script>
+    <script src="/public/assets/js/products.js"></script>
+</body>
+
+</html>
