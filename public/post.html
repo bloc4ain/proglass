@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
         crossorigin="anonymous">
 
-    <title>Opinions</title>
+    <title>Post</title>
 </head>
 
 <body>
@@ -37,16 +37,15 @@
                     <a class="nav-link" href="/news">News</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="/opinions">Opinions</a>
+                    <a class="nav-link" href="/opinions">Opinions</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/topselling">Top Selling</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item active">
                     <a class="nav-link" href="/post">Post</a>
                 </li>
             </ul>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addNewsModal" id="addNewsBtn">Add Opinion</button>
         </div>
     </nav>
     <div id="progress" class="progress">
@@ -59,49 +58,58 @@
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Name</th>
-                    <th scope="col">Content</th>
-                    <th scope="col">Edit</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Subject</th>
+                    <th scope="col">View/Delete</th>
                 </tr>
             </thead>
             <tbody></tbody>
         </table>
     </section>
 
-    <div class="modal fade" id="addNewsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Opinion</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Post</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <form id="modal-form">
-                        <fieldset>
-                            <legend>Opinion</legend>
-                            <div class="form-group">
-                                <label for="opinionNameInput">Name</label>
-                                <input required type="text" class="form-control" id="opinionNameInput" name="name" placeholder="Enter name">
-                            </div>
-                            <div class="form-group">
-                                <label for="opinionContentInput">Content</label>
-                                <textarea class="form-control" id="opinionContentInput" name="content" rows="3"></textarea>
-                            </div>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
-                        </fieldset>
-                    </form>
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Email</h4>
+                        <p id="email-field" class="card-text"></p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Name</h4>
+                        <p id="name-field" class="card-text"></p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Address</h4>
+                        <p id="address-field"></p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Text</h4>
+                        <p id="text-field"></p>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Are you sure you want to delete opinion?</h5>
+                    <h5 class="modal-title" id="deleteModalLabel">Are you sure you want to delete post?</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -138,7 +146,7 @@
         crossorigin="anonymous"></script>
     <script src="/public/assets/js/parse.js"></script>
     <script src="/public/assets/js/init.js"></script>
-    <script src="/public/assets/js/opinions.js"></script>
+    <script src="/public/assets/js/post.js"></script>
 </body>
 
 </html>

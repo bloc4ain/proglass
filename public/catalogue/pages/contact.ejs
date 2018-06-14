@@ -89,7 +89,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="/">Home
                             <span class="sr-only">(current)</span>
                         </a>
@@ -97,109 +97,51 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/catalogue">Catalogue</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/contact">Contact</a>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/contact">Contact
+                            <span class="sr-only">(current)</span>
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
-
-    <header class="jumbotron">
-        <h1 class="text-center pb-3 display-3">Glass Machinery</h1>
-        <h3 class="text-center pb-3 display-6">Parts & Service</h3>
-        <p class="lead text-center">
-            <a class="btn btn-primary btn-lg" href="/catalogue" role="button">Catalogue</a>
-        </p>
-    </header>
-
-    <section id="news-section" class="pb-5">
-        <h3 class="text-center display-4 p-4">News</h3>
-        <div class="container-fluid">
-            <div class="row justify-content-center">
-                <% news.forEach(function(n) { %>
-                    <article class="col col-sm-6 col-md-4 col-lg-3">
-                        <div class="shadow card text-primary bg-white mb-2 rounded" style="max-width: 20rem;">
-                            <div class="card-body">
-                                <h4 class="card-title">
-                                    <%= n.title %>
-                                </h4>
-                                <p class="card-text">
-                                    <%= n.content %>
-                                </p>
-                            </div>
+    <h4 class="text-center mt-5" style="text-transform: none;">
+        <%= message %>
+    </h4>
+    <section class="container pt-5 pb-5">
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <form action="/contact" method="POST">
+                    <fieldset>
+                        <legend>Contact form</legend>
+                        <div class="form-group">
+                            <label for="inputEmail">Email address</label>
+                            <input required name="email" type="email" class="form-control" id="inputEmail" aria-describedby="emailHelp" placeholder="Enter email">
+                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                         </div>
-                    </article>
-                <% }); %>
+                        <div class="form-group">
+                            <label for="inputName">Name</label>
+                            <input required name="name" type="text" class="form-control" id="inputName" placeholder="First and last names">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputAddress">Address</label>
+                            <textarea required name="address" class="form-control" id="inputAddress" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputSubject">Subject</label>
+                            <input required name="subject" type="text" class="form-control" id="inputSubject" placeholder="Subject">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputText">Text</label>
+                            <textarea required name="text" class="form-control" id="inputText" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </fieldset>
+                </form>
             </div>
         </div>
     </section>
-
-    <section id="best-selling" class="pb-5">
-        <h3 class="text-center display-4">Top selling</h3>
-        <div class="container-fluid">
-            <div class="row justify-content-center">
-                <% topSelling.forEach(function(n) { %>
-                    <article class="p-3 col-12 col-md-6 col-lg-2">
-                        <div class="card h-100 p-3 mb-5 rounded bs-card text-white">
-                            <a href="<%= n.image ? n.image.url : '#' %>">
-                                <img class="card-img-top" src="<%= n.image && n.image.url %>" alt="">
-                            </a>
-                            <div class="card-body">
-                                <h4 class="card-title">
-                                    <%= n.name %>
-                                </h4>
-                                <h5 class="text-white">CODE:
-                                    <%= n.code %>
-                                </h5>
-                                <p class="card-text">
-                                    <%= n.description %>
-                                </p>
-                            </div>
-                            <!-- <div class="card-footer">
-                            <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
-                        </div> -->
-                        </div>
-                    </article>
-                <% }); %>
-            </div>
-    </section>
-
-    <section id="recommendations">
-        <div class="container">
-            <div class="row">
-                <div class="title col-12 align-center">
-                    <h2 class="pb-3 mbr-fonts-style display-2">
-                        <strong style="font-size: 70px">
-                            WHAT OUR USERS SAY
-                        </strong>
-                    </h2>
-                </div>
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="row justify-content-center">
-                <% opinions.forEach(function(n) { %>
-                    <article class="align-center col-12 col-md-10 mb-5">
-                        <div class="panel-item p-4">
-                            <div class="card-block">
-                                <p class="mbr-text mbr-fonts-style mbr-white display-7" style="color: white; font-size: 40px">
-                                    <%= n.content %>
-                                </p>
-                            </div>
-                            <div class="card-footer">
-                                <div class="mbr-author-name mbr-bold mbr-fonts-style mbr-white display-7" style="color: white; font-size: 30px">
-                                    <%= n.name %>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-                <% }); %>
-            </div>
-        </div>
-    </section>
-
     <!-- Footer -->
     <footer class="py-5 bg-dark">
         <div class="container">

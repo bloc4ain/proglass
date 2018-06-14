@@ -12,7 +12,7 @@ if (!databaseUri) {
 }
 
 var api = new ParseServer({
-    databaseURI: databaseUri || 'mongodb://*:*@ds247670.mlab.com:47670/proglass',
+    databaseURI: databaseUri || '',
     cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
     appId: process.env.APP_ID || 'myAppId',
     masterKey: process.env.MASTER_KEY || '123123', //Add your master key here. Keep it secret!
@@ -34,33 +34,41 @@ app.use('/public', express.static(path.join(__dirname, '/public')));
 var mountPath = process.env.PARSE_MOUNT || '/parse';
 app.use(mountPath, api);
 
-// Parse Server plays nicely with the rest of your web routes
-app.get('/', function (req, res) {
-    res.status(200).send('I dream of being a website.  Please star the parse-server repo on GitHub!');
-});
+// // Parse Server plays nicely with the rest of your web routes
+// app.get('/', function (req, res) {
+//     res.status(200).send('I dream of being a website.  Please star the parse-server repo on GitHub!');
+// });
 
-app.get('/admin', function (req, res) {
+app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, '/public/dashboard.html'));
 });
 
-app.get('/admin/categories', function (req, res) {
+app.get('/categories', function (req, res) {
     res.sendFile(path.join(__dirname, '/public/categories.html'));
 });
 
-app.get('/admin/news', function (req, res) {
+app.get('/news', function (req, res) {
     res.sendFile(path.join(__dirname, '/public/news.html'));
 });
 
-app.get('/admin/products', function (req, res) {
+app.get('/products', function (req, res) {
     res.sendFile(path.join(__dirname, '/public/products.html'));
 });
 
-app.get('/admin/suppliers', function (req, res) {
+app.get('/suppliers', function (req, res) {
     res.sendFile(path.join(__dirname, '/public/suppliers.html'));
 });
 
-app.get('/admin/opinions', function (req, res) {
+app.get('/opinions', function (req, res) {
     res.sendFile(path.join(__dirname, '/public/opinions.html'));
+});
+
+app.get('/topselling', function (req, res) {
+    res.sendFile(path.join(__dirname, '/public/topselling.html'));
+});
+
+app.get('/post', function (req, res) {
+    res.sendFile(path.join(__dirname, '/public/post.html'));
 });
 
 var port = process.env.PORT || 1337;
