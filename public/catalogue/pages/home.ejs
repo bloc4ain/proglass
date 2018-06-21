@@ -142,8 +142,8 @@
                 <% topSelling.forEach(function(n) { %>
                     <article class="p-3 col-12 col-md-6 col-lg-2">
                         <div class="card h-100 p-3 mb-5 rounded bs-card text-white">
-                            <a href="<%= n.image ? n.image.url : '#' %>">
-                                <img class="card-img-top" src="<%= n.image && n.image.url %>" alt="">
+                            <a <%= n.imgsrc ? 'target="_blank"' : '' %> href="<%= n.imgsrc || '#' %>">
+                                <img class="card-img-top" src="<%= n.imgsrc %>" alt="">
                             </a>
                             <div class="card-body">
                                 <h4 class="card-title">

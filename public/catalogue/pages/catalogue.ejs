@@ -110,12 +110,12 @@
                 <% products.forEach(function(product) { %>
                     <article class="col-lg-3 col-md-4 mb-4">
                         <div class="card h-100 shadow p-3 bg-white rounded">
-                            <a <%= product.image ? 'target="_blank"' : '' %> href="<%= product.image ? product.image.url : '#' %>">
-                                <img class="card-img-top" src="<%= product.image && product.image.url %>" alt="">
+                            <a <%= product.imgsrc ? 'target="_blank"' : '' %> href="<%= product.imgsrc || '#' %>">
+                                <img class="card-img-top" src="<%= product.imgsrc %>" alt="">
                             </a>
                             <div class="card-body">
                                 <h4 class="card-title">
-                                    <a <%= product.image ? 'target="_blank"' : '' %> href="<%= product.image ? product.image.url : '#' %>">
+                                    <a <%= product.imgsrc ? 'target="_blank"' : '' %> href="<%= product.imgsrc || '#' %>">
                                         <%= product.name %>
                                     </a>
                                 </h4>
