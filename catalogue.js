@@ -22,6 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Serve static assets from the /public folder
 app.use('/public', express.static(path.join(__dirname, '/public/catalogue')));
+app.use('/img', express.static(path.join(__dirname, '/img')));
 
 // Parse Server plays nicely with the rest of your web routes
 app.get('/', function (req, res) {
@@ -56,7 +57,7 @@ app.get('/catalogue', async function (req, res) {
         var nameQuery = new Parse.Query( "Product" ).matches( "name", new RegExp(req.query.kw, "i") )
         var codeQuery= new Parse.Query( "Product" ).equalTo( "code", req.query.kw );
         var supplierCodeQuery = new Parse.Query( "Product" ).equalTo( "supplierCode", req.query.kw );
-        var descriptionQuery = new Parse.Query( "Product" ).matches( "description", req.query.kw );
+        var descriptionQuery = new Parse.Query( "Product" ).matches( "description", new RegExp(req.query.kw, "i") );
         query = Parse.Query.or( nameQuery, codeQuery, supplierCodeQuery, descriptionQuery );
     } else {
         query = new Parse.Query( "Product" );
@@ -69,8 +70,7 @@ app.get('/catalogue', async function (req, res) {
     var pages = Math.ceil(count / perPage);
     var currentPage = Math.min(Math.max(Number(req.query.page) || 1, 1), pages);
 
-    var result = await query.ascending("name").skip(Math.max(0, (currentPage - 1) * perPage)).limit(perPage).find();
-    // console.log(result.map(r => r.toJSON()))
+    var result = await query.skip(Math.max(0, (currentPage - 1) * perPage)).limit(perPage).ascending("name").find();
     res.render('catalogue', {
         products: result.map(r => r.toJSON()),
         page: currentPage,

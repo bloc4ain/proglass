@@ -12,24 +12,27 @@
         crossorigin="anonymous">
     <link rel="stylesheet" href="https://bootswatch.com/4/lux/bootstrap.min.css">
     <style>
-        body {
-            padding-top: 75px;
+        nav.navbar {
+            padding: 5px 5px;
         }
 
-        @media (min-width: 992px) {
-            body {
-                padding-top: 80px;
-            }
+        .card-img-top {
+            box-shadow: 0px 0px 5px black;
         }
+
+        .card-title {
+            color: black;
+        }
+
     </style>
     <title>Catalogue</title>
 </head>
 
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <img class="navbar-brand" width="300" src="/public/assets/logo-big.jpg" alt="ProGlass">
+            <img class="navbar-brand" style="max-width: 300px" src="/public/assets/logo-big.jpg" alt="ProGlass">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive"
                 aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -54,10 +57,10 @@
 
     <!-- Page Content -->
     <main class="container">
-        <div class="row">
-            <section class="col-lg-3 shadow-lg p-3 mb-5 bg-white rounded animated fadeIn">
+        <div class="row" >
+            <section class="col-lg-3 shadow-lg p-md-3 p-sm-5 mb-5 bg-white rounded animated fadeIn" id="sform">
                 <h1 class="my-4">Search</h1>
-                <form method="GET" action="/catalogue">
+                <form method="GET" action="/catalogue" >
                     <div class="form-group">
                         <label for="exampleFormControlInput1">Keyword</label>
                         <input value="<%= kw %>" name="kw" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter keyword">
@@ -78,7 +81,7 @@
                 </form>
             </section>
             <section class="col-lg-9">
-                <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                     <ol class="carousel-indicators">
                         <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
                         <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
@@ -110,14 +113,10 @@
                 <% products.forEach(function(product) { %>
                     <article class="col-lg-3 col-md-4 mb-4">
                         <div class="card h-100 shadow p-3 bg-white rounded">
-                            <a <%= product.imgsrc ? 'target="_blank"' : '' %> href="<%= product.imgsrc || '#' %>">
-                                <img class="card-img-top" src="<%= product.imgsrc %>" alt="">
-                            </a>
+                            <img class="card-img-top" src="<%= product.imgsrc %>" alt="">
                             <div class="card-body">
                                 <h4 class="card-title">
-                                    <a <%= product.imgsrc ? 'target="_blank"' : '' %> href="<%= product.imgsrc || '#' %>">
-                                        <%= product.name %>
-                                    </a>
+                                    <%= product.name %>
                                 </h4>
                                 <h5>Code:
                                     <%= product.code %>

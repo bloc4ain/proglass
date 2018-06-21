@@ -4,6 +4,7 @@
 var express = require('express');
 var ParseServer = require('parse-server').ParseServer;
 var path = require('path');
+var fileUpload = require('express-fileupload');
 
 var databaseUri = process.env.DATABASE_URI || process.env.MONGODB_URI;
 
@@ -29,6 +30,9 @@ var app = express();
 
 // Serve static assets from the /public folder
 app.use('/public', express.static(path.join(__dirname, '/public')));
+app.use('/img', express.static(path.join(__dirname, '/img')));
+
+app.use(fileUpload());
 
 // Serve the Parse API on the /parse URL prefix
 var mountPath = process.env.PARSE_MOUNT || '/parse';
@@ -69,6 +73,19 @@ app.get('/topselling', function (req, res) {
 
 app.get('/post', function (req, res) {
     res.sendFile(path.join(__dirname, '/public/post.html'));
+});
+
+app.post('/image/:name', function(req, res) {
+    if (!req.files) return res.status(400).send('No files were uploaded.');
+
+    // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
+    let sampleFile = req.files.sampleFile;
+
+    // Use the mv() method to place the file somewhere on your server
+    sampleFile.mv(path.join(__dirname, 'img', req.params.name), function(err) {
+        if (err) return res.status(500).send(err);
+        res.send('File uploaded!');
+    });
 });
 
 var port = process.env.PORT || 1337;

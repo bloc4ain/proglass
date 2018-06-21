@@ -47,6 +47,7 @@
             </ul>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addProductModal" id="addproductBtn">Add Product</button>
             <form class="form-inline my-2 my-lg-0" method="GET" action="/products">
+                <select class="form-control" id="productCatInput1" name="category" value="" placeholder="Select category"></select>
                 <input class="form-control mr-sm-2" type="text" placeholder="Search" name="search">
                 <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
             </form>
@@ -84,8 +85,8 @@
         </li>
     </ul>
 
-    <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+        <div class="modal-dialog" role="document" style="max-width: 1000px">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Add Product</h5>
@@ -104,10 +105,24 @@
                                         <input required type="text" class="form-control" id="productNameInput" name="name" placeholder="Enter name">
                                     </div>
                                 </div>
+                            </div>
+                            <div class="form-row">
                                 <div class="col">
                                     <div class="form-group">
                                         <label for="productPriceInput">Price</label>
                                         <input required type="text" class="form-control" id="productPriceInput" name="price" placeholder="Enter price">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="productPercentageInput">Percentage overprice</label>
+                                        <input type="text" class="form-control" id="productPercentageInput" name="overprice" placeholder="Enter percentage">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="productResultPrice">Result price</label>
+                                        <input disabled type="text" class="form-control" id="productResultPrice" name="price1" placeholder="">
                                     </div>
                                 </div>
                             </div>
@@ -133,7 +148,7 @@
                                 </div>
                                 <div class="col">
                                     <div class="form-group">
-                                        <label for="productSupplierCodeInput">Supplier code</label>
+                                        <label for="productSupplierCodeInput">Original Part Code</label>
                                         <input type="text" class="form-control" id="productSupplierCodeInput" name="supplierCode" placeholder="Enter supplier code">
                                     </div>
                                 </div>

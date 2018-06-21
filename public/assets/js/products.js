@@ -2,14 +2,24 @@ var products = [];
 var categories = {};
 var suppliers = {};
 
-function uploadImage() {
+function uploadImage(res) {
     var fileUploadControl = $("#exampleInputFile")[0];
-    if (fileUploadControl.files.length > 0) {
-        var file = fileUploadControl.files[0];
-        var parseFile = new Parse.File(file.name.replace(/[^a-zA-Z0-9 ]/g, ' '), file);
-        return parseFile.save();
+    if (fileUploadControl.files.length === 0) {
+        return Promise.resolve(undefined);
     }
-    return Promise.resolve(undefined);
+    var formData = new FormData();
+    formData.append('sampleFile', fileUploadControl.files[0]);
+
+    return $.ajax({
+        url : '/image/' + res.id,
+        type : 'POST',
+        data : formData,
+        processData: false,  // tell jQuery not to process the data
+        contentType: false  // tell jQuery not to set contentType
+    }).then(function() {
+        res.set('imgsrc', '/img/' + res.id);
+        return res.save();
+    });
 }
 
 function checkProduct() {
@@ -30,37 +40,35 @@ $( "#modal-form" ).on( "submit", function( e ) {
     e.preventDefault();
     $( "#progress" ).show();
     checkProduct().then(function() {
-        return uploadImage().then(function(file) {
-            var product;
-            if ( $( "#exampleModalLabel" ).data( "product" ) !== undefined ) {
-                product = $( "#exampleModalLabel" ).data( "product" );
-            } else {
-                var Product = Parse.Object.extend( "Product" );
-                product = new Product();
+        var product;
+        if ( $( "#exampleModalLabel" ).data( "product" ) !== undefined ) {
+            product = $( "#exampleModalLabel" ).data( "product" );
+        } else {
+            var Product = Parse.Object.extend( "Product" );
+            product = new Product();
+        }
+
+        product.set( "withPreorder", false );
+        $( "#modal-form" ).serializeArray().forEach( function( element ) {
+            switch (element.name) {
+                case "supplier":
+                    product.set( "supplier", suppliers[element.value] );
+                    break;
+                case "category":
+                    product.set( "category", categories[element.value] );
+                    break;
+                case "withPreorder":
+                    product.set( "withPreorder", $( "#withPreorderInput" ).prop( "checked" ) );
+                    break;
+                default:
+                    product.set( element.name, element.value );
             }
-    
-            file && product.set( "image", file );
-            product.set( "withPreorder", false );
-            $( "#modal-form" ).serializeArray().forEach( function( element ) {
-                switch (element.name) {
-                    case "supplier":
-                        product.set( "supplier", suppliers[element.value] );
-                        break;
-                    case "category":
-                        product.set( "category", categories[element.value] );
-                        break;
-                    case "withPreorder":
-                        product.set( "withPreorder", $( "#withPreorderInput" ).prop( "checked" ) );
-                        break;
-                    default:
-                        product.set( element.name, element.value );
-                }
-            } );
-            
-            $( "#addProductModal" ).modal( "hide" );
-            return product.save();
-        });
+        } );
+
+        $( "#addProductModal" ).modal( "hide" );
+        return product.save();
     })
+    .then(uploadImage)
     .then( reload )
     .catch( showError );
 } );
@@ -85,6 +93,7 @@ $( "#addproductBtn" ).click( function() {
     $( "#modal-form select" ).val( "" );
     $( "#modal-form textarea" ).val( "" );
     $( "#exampleModalLabel" ).text( "Add Product" );
+    $( "#img-progress" ).hide();
 } );
 
 $( "#product-image" ).on("load", function() {
@@ -94,6 +103,17 @@ $( "#product-image" ).on("load", function() {
 $( "#btn-save" ).click( function () {
     $( "#modal-form" ).submit();
 } );
+
+$( "#productPercentageInput,#productPriceInput" ).keyup(calcPrice);
+
+function calcPrice() {
+    var price = Number($( "#productPriceInput" ).val());
+    var percentage = Number($( "#productPercentageInput" ).val());
+    if (!isNaN(price) && !isNaN(percentage)) {
+        var result = price * percentage / 100 + price;
+        $( "#productResultPrice" ).val(result);
+    }
+}
 
 $( "nav .form-inline input" ).val( getParameterByName( "search" ) );
 
@@ -111,6 +131,7 @@ $( "table tbody" ).click( function( e ) {
         $( "#productAdditionalInfoInput" ).val( product.get( "additionalInfo" ) );
         $( "#productBarCodeInput" ).val( product.get( "code" ) );
         $( "#productSupplierCodeInput" ).val( product.get( "supplierCode" ) );
+        $( "#productPercentageInput" ).val( product.get( "overprice" ) );
         product.get( "category" ) && $( "#productCatInput" ).val( product.get( "category" ).id );
         product.get( "supplier" ) && $( "#productSupplierInput" ).val( product.get( "supplier" ).id );
         product.get( "category" ) || $( "#productCatInput" ).val( null );
@@ -118,8 +139,9 @@ $( "table tbody" ).click( function( e ) {
         $( "#productMinQuantityInput" ).val( product.get( "threshold" ) );
         $( "#withPreorderInput" ).prop( "checked", !!product.get( "withPreorder" ) );
         $( "#exampleInputFile" ).val("");
-        if (product.get("image")) {
-            $( "#product-image" ).prop( "src", product.get("image").url() );
+        calcPrice();
+        if (product.get("imgsrc")) {
+            $( "#product-image" ).prop( "src", product.get("imgsrc") );
             $( "#img-progress" ).show();
         } else {
             $( "#product-image" ).prop( "src", "" );
@@ -138,6 +160,16 @@ $( "table tbody" ).click( function( e ) {
 
 Promise.all([
     new Parse.Query( "Category" ).ascending("name").find(function(_categories) {
+        $( "#productCatInput1" ).html( `
+            <option selected value>Select category</option>
+            <option>No Category</option>
+        ` + _categories.map( function( category ) {
+            categories[category.id] = category;
+            return `
+                <option value="${category.id}">${category.get("name")}</option>
+            `;
+        } ).join( "" ) );
+        $( "#productCatInput1" ).val( getParameterByName("category") );
         $( "#productCatInput" ).html( _categories.map( function( category ) {
             categories[category.id] = category;
             return `
@@ -155,15 +187,29 @@ Promise.all([
     })
 ]).then(function() {
     var search = getParameterByName( "search" );
+    var query;
     if ( !search ) {
-        new Parse.Query( "Product" ).ascending("name").include("category").include("supplier").find().then( init ).catch( showError );
+        query = new Parse.Query( "Product" );
     } else {
-        var nameQuery = new Parse.Query( "Product" ).matches( "name", search )
+        var nameQuery = new Parse.Query( "Product" ).matches( "name", new RegExp(search, "i") )
         var codeQuery= new Parse.Query( "Product" ).equalTo( "code", search );
         var supplierCodeQuery = new Parse.Query( "Product" ).equalTo( "supplierCode", search );
-        var descriptionQuery = new Parse.Query( "Product" ).matches( "description", search );
-        Parse.Query.or( nameQuery, codeQuery, supplierCodeQuery, descriptionQuery ).ascending("name").find().then( init ).catch( showError );
+        var descriptionQuery = new Parse.Query( "Product" ).matches( "description", new RegExp(search, "i") );
+        query = Parse.Query.or( nameQuery, codeQuery, supplierCodeQuery, descriptionQuery );
     }
+    var cat = getParameterByName("category");
+    switch (cat) {
+        case 'No Category':
+            query.equalTo("category", null);
+            break;
+        case undefined:
+        case '':
+            break;
+        default:
+            query.equalTo("category", { "__type": "Pointer", "className": "Category", "objectId": cat });
+            break;
+    }
+    query.include("category").include("supplier").ascending("name").find().then( init ).catch( showError );
 })
 .catch( showError );
 

@@ -38,6 +38,7 @@ $( "table tbody" ).click( function( e ) {
         $( "#supplierAddressInput" ).val( supplier.get( "address" ) );
         $( "#supplierPhoneInput" ).val( supplier.get( "phone" ) );
         $( "#supplierInfoInput" ).val( supplier.get( "info" ) );
+        $( "#supplierEmailInput" ).val( supplier.get( "email" ) );
         $( "#addSupplierModal" ).modal( {} );
     }
 
