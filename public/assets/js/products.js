@@ -94,6 +94,7 @@ $( "#addproductBtn" ).click( function() {
     $( "#modal-form textarea" ).val( "" );
     $( "#exampleModalLabel" ).text( "Add Product" );
     $( "#img-progress" ).hide();
+    $( "#product-image" ).prop( "src", "" );
 } );
 
 $( "#product-image" ).on("load", function() {
