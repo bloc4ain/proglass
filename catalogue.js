@@ -48,42 +48,34 @@ app.get('/', function (req, res) {
 });
 
 app.get('/catalogue', async function (req, res) {
-    // var categories = await new Parse.Query( "Category" ).find();
-    
-    // var query;
-    // if (req.query.kw) {
-    //     currentPage = 1;
-    //     var nameQuery = new Parse.Query( "Product" ).matches( "name", new RegExp(req.query.kw, "i") )
-    //     var codeQuery= new Parse.Query( "Product" ).equalTo( "code", req.query.kw );
-    //     var supplierCodeQuery = new Parse.Query( "Product" ).equalTo( "supplierCode", req.query.kw );
-    //     var descriptionQuery = new Parse.Query( "Product" ).matches( "description", req.query.kw );
-    //     query = Parse.Query.or( nameQuery, codeQuery, supplierCodeQuery, descriptionQuery );
-    // } else {
-    //     query = new Parse.Query( "Product" );
-    // }
-    // if (req.query.cat) {
-    //     query.equalTo("category", { "__type": "Pointer", "className": "Category", "objectId": req.query.cat });
-    // }
-    // var count = await query.count();
-    // var perPage = 20;
-    // var pages = Math.ceil(count / perPage);
-    // var currentPage = Math.min(Math.max(Number(req.query.page) || 1, 1), pages);
+    var categories = await new Parse.Query( "Category" ).find();
 
-    // var result = await query.ascending("name").skip(Math.max(0, (currentPage - 1) * perPage)).limit(perPage).find();
-    // // console.log(result.map(r => r.toJSON()))
-    // res.render('catalogue', {
-    //     products: result.map(r => r.toJSON()),
-    //     page: currentPage,
-    //     pages: new Array(pages).fill(0).map((r, i) => i + 1),
-    //     categories: categories.map(c => c.toJSON()),
-    //     kw: req.query.kw,
-    //     cat: req.query.cat
-    // });
+    var query;
+    if (req.query.kw) {
+        currentPage = 1;
+        var nameQuery = new Parse.Query( "Product" ).matches( "name", new RegExp(req.query.kw, "i") )
+        var codeQuery= new Parse.Query( "Product" ).equalTo( "code", req.query.kw );
+        var supplierCodeQuery = new Parse.Query( "Product" ).equalTo( "supplierCode", req.query.kw );
+        var descriptionQuery = new Parse.Query( "Product" ).matches( "description", req.query.kw );
+        query = Parse.Query.or( nameQuery, codeQuery, supplierCodeQuery, descriptionQuery );
+    } else {
+        query = new Parse.Query( "Product" );
+    }
+    if (req.query.cat) {
+        query.equalTo("category", { "__type": "Pointer", "className": "Category", "objectId": req.query.cat });
+    }
+    var count = await query.count();
+    var perPage = 20;
+    var pages = Math.ceil(count / perPage);
+    var currentPage = Math.min(Math.max(Number(req.query.page) || 1, 1), pages);
+
+    var result = await query.ascending("name").skip(Math.max(0, (currentPage - 1) * perPage)).limit(perPage).find();
+    // console.log(result.map(r => r.toJSON()))
     res.render('catalogue', {
-        products: [],
-        page: 1,
-        pages: [],
-        categories: [],
+        products: result.map(r => r.toJSON()),
+        page: currentPage,
+        pages: new Array(pages).fill(0).map((r, i) => i + 1),
+        categories: categories.map(c => c.toJSON()),
         kw: req.query.kw,
         cat: req.query.cat
     });

@@ -1,5 +1,5 @@
 Parse.initialize( "myAppId" );
-Parse.serverURL = "http://localhost:1337/parse";
+Parse.serverURL = "https://m.progls.com/parse";
 
 function getParameterByName( name, url ) {
     if (!url) url = window.location.href;
