@@ -203,6 +203,7 @@ Promise.all([
             query.equalTo("category", null);
             break;
         case undefined:
+        case null:
         case '':
             break;
         default:
