@@ -20,6 +20,7 @@
   },
   "scripts": {
     "start": "node index.js",
+    "catalogue": "node catalogue.js",
     "dashboard": "parse-dashboard --config parse-dashboard-config.json"
   },
   "engines": {

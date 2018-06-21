@@ -12,7 +12,7 @@ if (!databaseUri) {
 }
 
 var api = new ParseServer({
-    databaseURI: databaseUri || '',
+    databaseURI: databaseUri || 'localhost:27017/proglass',
     cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
     appId: process.env.APP_ID || 'myAppId',
     masterKey: process.env.MASTER_KEY || '123123', //Add your master key here. Keep it secret!
@@ -76,8 +76,6 @@ var httpServer = require('http').createServer(app);
 httpServer.listen(port, function () {
     console.log('parse-server-example running on port ' + port + '.');
 });
-
-require('./catalogue');
 
 // // This will enable the Live Query real-time server
 // ParseServer.createLiveQueryServer(httpServer);
