@@ -1,0 +1,41 @@
+#db
+docker stop mongo && \
+docker stop maze && \
+docker rm maze && \
+docker rmi maze
+
+docker run -it -d \
+--name mongodb \
+--restart=unless-stopped \
+-v /data:/data \
+-e NODE_ENV=test \
+-p 27017:27017 \
+mongodb
+
+# admin
+docker stop maze && \
+docker rm maze && \
+docker rmi maze && \
+docker build --rm -t maze -f ./maze_Dockerfile . && \
+docker run -it -d \
+    --name maze \
+    --link mongodb \
+    --restart=unless-stopped \
+    -v /store/data/maze-images:/usr/src/app/img \
+    -e NODE_ENV=test \
+    -p 3000:3000 \
+    maze
+
+# client
+docker stop maze-simple-client && \
+docker rm maze-simple-client && \
+docker rmi maze-simple-client && \
+docker build --rm -t maze-simple-client -f ./maze-simple-client_Dockerfile . && \
+docker run -it -d \
+    --name maze-simple-client \
+    --link maze \
+    --restart=unless-stopped \
+    -v /store/data/maze-images:/usr/src/app/img \
+    -e NODE_ENV=test \
+    -p 4000:3000 \
+    maze-simple-client
