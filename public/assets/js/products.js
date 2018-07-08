@@ -278,6 +278,7 @@ function renderProducts( products, start ) {
             <tr>
                 <th scope="row">${i+1}</th>
                 <td>${p.get( "name" )}</td>
+                <td><img style="max-width:40px; max-height:40px" src="${p.get( 'imgsrc' )}" /></td>
                 <td>${p.get( "code" )}</td>
                 <td>${p.get( "category" ) ? p.get( "category" ).get("name") : ""}</td>
                 <td>${p.get( "quantity" )}</td>
