@@ -126,7 +126,7 @@ $( "#print-labels-btn" ).click(function() {
     var cnt = $('<div class="container"></div>').append(rows);
     $(window.frames["prt-labels"].document.body).empty();
     $(window.frames["prt-labels"].document.body).append(cnt);
-    window.frames["prt-labels"].print();
+    setTimeout(() => window.frames["prt-labels"].print(), 1000);
 });
 
 $( "#productPercentageInput,#productPriceInput" ).keyup(calcPrice);
