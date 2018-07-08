@@ -2,6 +2,8 @@ var products = [];
 var categories = {};
 var suppliers = {};
 
+$(window.frames["prt-labels"].document.head).append($('<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">'));
+
 function uploadImage(res) {
     var fileUploadControl = $("#exampleInputFile")[0];
     if (fileUploadControl.files.length === 0) {
@@ -105,6 +107,28 @@ $( "#btn-save" ).click( function () {
     $( "#modal-form" ).submit();
 } );
 
+$( "#print-labels-btn" ).click(function() {
+    var company = 'PRO GLASS SERVICE LTD';
+    var name = $( "#exampleModalLabel" ).data( "product" ).get("name");
+    var code = $( "#exampleModalLabel" ).data( "product" ).get("code");
+    var rows = [];
+    for (var i = 0; i < 10; i++) {
+        var cols = [];
+        for (var j = 0; j < 4; j++) {
+            cols.push($(`<div class="col">
+                <p style="font-weight:bold;">${company}</p>
+                <p>${name}</p>
+                <p class="float-right">S№ ${code}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+            </div>`));
+        }
+        rows.push($(`<div class="row"></div>`).append(cols));
+    }
+    var cnt = $('<div class="container"></div>').append(rows);
+    $(window.frames["prt-labels"].document.body).empty();
+    $(window.frames["prt-labels"].document.body).append(cnt);
+    window.frames["prt-labels"].print();
+});
+
 $( "#productPercentageInput,#productPriceInput" ).keyup(calcPrice);
 
 function calcPrice() {
@@ -112,7 +136,7 @@ function calcPrice() {
     var percentage = Number($( "#productPercentageInput" ).val());
     if (!isNaN(price) && !isNaN(percentage)) {
         var result = price * percentage / 100 + price;
-        $( "#productResultPrice" ).val(result);
+        $( "#productResultPrice" ).val(parseFloat(result).toFixed(2));
     }
 }
 
@@ -272,6 +296,14 @@ function init( _products ) {
     $( "#progress" ).hide();
 }
 
+function getResPrice(p) {
+    if (p.get('overprice')) {
+        return parseFloat(Number(p.get('price')) * Number(p.get('overprice')) / 100 + Number(p.get('price'))).toFixed(2);
+    } else {
+        return parseFloat(Number(p.get('price'))).toFixed(2);
+    }
+}
+
 function renderProducts( products, start ) {
     let html = products.map( function( p, i ) {
         return (`
@@ -282,7 +314,7 @@ function renderProducts( products, start ) {
                 <td>${p.get( "code" )}</td>
                 <td>${p.get( "category" ) ? p.get( "category" ).get("name") : ""}</td>
                 <td>${p.get( "quantity" )}</td>
-                <td>${p.get( "price" )}</td>
+                <td>${getResPrice(p)}</td>
                 <td>
                     <button type="button" class="btn btn-primary" data-productedit="${start+i}">Edit</button>
                     <button type="button" class="btn btn-primary" data-productdelete="${start+i}">Delete</button>
